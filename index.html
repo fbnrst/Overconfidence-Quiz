@@ -333,9 +333,9 @@
                 unit: "meters"
             },
             {
-                question: "What is the speed of light (in kilometers per second)?",
-                answer: 299792,
-                unit: "km/s"
+                question: "What is the speed of light in vacuum (in meters per second)?",
+                answer: 299792458,
+                unit: "m/s"
             },
             {
                 question: "What is the average depth of the Pacific Ocean (in meters)?",
@@ -414,9 +414,12 @@
             const lowInput = document.getElementById(`low-${currentQuestion}`);
             const highInput = document.getElementById(`high-${currentQuestion}`);
             
+            const lowValue = lowInput.value.trim();
+            const highValue = highInput.value.trim();
+            
             userAnswers[currentQuestion] = {
-                low: parseFloat(lowInput.value) || null,
-                high: parseFloat(highInput.value) || null
+                low: lowValue === '' ? null : parseFloat(lowValue),
+                high: highValue === '' ? null : parseFloat(highValue)
             };
         }
 
