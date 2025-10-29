@@ -265,7 +265,7 @@
 <body>
     <div class="container">
         <h1>🎯 Overconfidence Quiz</h1>
-        
+
         <div class="start-screen" id="startScreen">
             <div class="intro">
                 <h2>Welcome to the Overconfidence Quiz!</h2>
@@ -367,7 +367,7 @@
                 const questionDiv = document.createElement('div');
                 questionDiv.className = 'question-container';
                 questionDiv.id = `question-${index}`;
-                
+
                 questionDiv.innerHTML = `
                     <div class="question">
                         <div class="question-number">Question ${index + 1} of ${questions.length}</div>
@@ -384,7 +384,7 @@
                         </div>
                     </div>
                 `;
-                
+
                 container.appendChild(questionDiv);
             });
         }
@@ -397,7 +397,7 @@
 
             // Show current question
             document.getElementById(`question-${index}`).classList.add('active');
-            
+
             // Update progress bar
             const progress = ((index + 1) / questions.length) * 100;
             document.getElementById('progressBar').style.width = progress + '%';
@@ -413,10 +413,10 @@
         function saveCurrentAnswer() {
             const lowInput = document.getElementById(`low-${currentQuestion}`);
             const highInput = document.getElementById(`high-${currentQuestion}`);
-            
+
             const lowValue = lowInput.value.trim();
             const highValue = highInput.value.trim();
-            
+
             userAnswers[currentQuestion] = {
                 low: lowValue === '' ? null : parseFloat(lowValue),
                 high: highValue === '' ? null : parseFloat(highValue)
@@ -472,7 +472,7 @@
             questions.forEach((q, index) => {
                 const answer = userAnswers[index];
                 const isCorrect = q.answer >= answer.low && q.answer <= answer.high;
-                
+
                 if (isCorrect) {
                     correct++;
                 }
@@ -492,7 +492,7 @@
 
             const percentage = (correct / questions.length) * 100;
             let feedback = '';
-            
+
             if (percentage >= 90) {
                 feedback = "Excellent! You're very well-calibrated. You understand your knowledge boundaries well.";
             } else if (percentage >= 70) {
