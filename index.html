@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overconfidence Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 2.5em;
+        }
+
+        .intro {
+            background: #f0f4ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .intro h2 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .intro p {
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .question-container {
+            display: none;
+            margin-bottom: 30px;
+        }
+
+        .question-container.active {
+            display: block;
+        }
+
+        .question {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .question-number {
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            color: #333;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        label {
+            display: block;
+            color: #666;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .progress {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            transition: width 0.3s;
+        }
+
+        .results {
+            display: none;
+            text-align: center;
+        }
+
+        .results.active {
+            display: block;
+        }
+
+        .score {
+            font-size: 3em;
+            color: #667eea;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .results-text {
+            font-size: 1.2em;
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .calibration-info {
+            background: #f0f4ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .calibration-info h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .answer-review {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            text-align: left;
+        }
+
+        .answer-review.correct {
+            border-left: 4px solid #4caf50;
+        }
+
+        .answer-review.incorrect {
+            border-left: 4px solid #f44336;
+        }
+
+        .answer-review-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .answer-review-details {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .start-screen {
+            text-align: center;
+        }
+
+        .start-screen.hidden {
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .input-group {
+                flex-direction: column;
+            }
+
+            .input-wrapper {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Overconfidence Quiz</h1>
+        
+        <div class="start-screen" id="startScreen">
+            <div class="intro">
+                <h2>Welcome to the Overconfidence Quiz!</h2>
+                <p>This quiz tests how well you can estimate your own knowledge. Most people are overconfident and provide ranges that are too narrow.</p>
+                <p><strong>Instructions:</strong></p>
+                <p>For each question, provide a <strong>90% confidence interval</strong>. This means you should give a LOW and HIGH estimate where you believe there's a 90% chance the correct answer falls within that range.</p>
+                <p>If you're well-calibrated, about 9 out of 10 answers should fall within your ranges. Most people only get 3-5 correct!</p>
+                <p><strong>All measurements use the metric system.</strong></p>
+            </div>
+            <button class="btn-primary" onclick="startQuiz()">Start Quiz</button>
+        </div>
+
+        <div id="quizContent" style="display: none;">
+            <div class="progress">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+
+            <div id="questionsContainer"></div>
+
+            <div class="button-group">
+                <button class="btn-secondary" id="prevBtn" onclick="previousQuestion()" style="display: none;">Previous</button>
+                <button class="btn-primary" id="nextBtn" onclick="nextQuestion()">Next</button>
+                <button class="btn-primary" id="submitBtn" onclick="submitQuiz()" style="display: none;">Submit</button>
+            </div>
+        </div>
+
+        <div class="results" id="results"></div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "What is the height of the Eiffel Tower in Paris (in meters)?",
+                answer: 330,
+                unit: "meters"
+            },
+            {
+                question: "What is the length of the Amazon River (in kilometers)?",
+                answer: 6400,
+                unit: "km"
+            },
+            {
+                question: "What is the depth of the Mariana Trench (in meters)?",
+                answer: 10994,
+                unit: "meters"
+            },
+            {
+                question: "What is the diameter of Earth at the equator (in kilometers)?",
+                answer: 12756,
+                unit: "km"
+            },
+            {
+                question: "What is the height of Mount Everest (in meters)?",
+                answer: 8849,
+                unit: "meters"
+            },
+            {
+                question: "What is the average distance from Earth to the Moon (in kilometers)?",
+                answer: 384400,
+                unit: "km"
+            },
+            {
+                question: "What is the wingspan of a Boeing 747 (in meters)?",
+                answer: 64.4,
+                unit: "meters"
+            },
+            {
+                question: "What is the speed of light (in kilometers per second)?",
+                answer: 299792,
+                unit: "km/s"
+            },
+            {
+                question: "What is the average depth of the Pacific Ocean (in meters)?",
+                answer: 4280,
+                unit: "meters"
+            },
+            {
+                question: "What is the length of the Great Wall of China (in kilometers)?",
+                answer: 21196,
+                unit: "km"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let userAnswers = [];
+
+        function startQuiz() {
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('quizContent').style.display = 'block';
+            renderQuestions();
+            showQuestion(0);
+        }
+
+        function renderQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-container';
+                questionDiv.id = `question-${index}`;
+                
+                questionDiv.innerHTML = `
+                    <div class="question">
+                        <div class="question-number">Question ${index + 1} of ${questions.length}</div>
+                        <div class="question-text">${q.question}</div>
+                        <div class="input-group">
+                            <div class="input-wrapper">
+                                <label for="low-${index}">Low Estimate (${q.unit})</label>
+                                <input type="number" id="low-${index}" step="any" placeholder="Minimum value">
+                            </div>
+                            <div class="input-wrapper">
+                                <label for="high-${index}">High Estimate (${q.unit})</label>
+                                <input type="number" id="high-${index}" step="any" placeholder="Maximum value">
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function showQuestion(index) {
+            // Hide all questions
+            document.querySelectorAll('.question-container').forEach(q => {
+                q.classList.remove('active');
+            });
+
+            // Show current question
+            document.getElementById(`question-${index}`).classList.add('active');
+            
+            // Update progress bar
+            const progress = ((index + 1) / questions.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+
+            // Update buttons
+            document.getElementById('prevBtn').style.display = index > 0 ? 'block' : 'none';
+            document.getElementById('nextBtn').style.display = index < questions.length - 1 ? 'block' : 'none';
+            document.getElementById('submitBtn').style.display = index === questions.length - 1 ? 'block' : 'none';
+
+            currentQuestion = index;
+        }
+
+        function saveCurrentAnswer() {
+            const lowInput = document.getElementById(`low-${currentQuestion}`);
+            const highInput = document.getElementById(`high-${currentQuestion}`);
+            
+            userAnswers[currentQuestion] = {
+                low: parseFloat(lowInput.value) || null,
+                high: parseFloat(highInput.value) || null
+            };
+        }
+
+        function nextQuestion() {
+            saveCurrentAnswer();
+            if (currentQuestion < questions.length - 1) {
+                showQuestion(currentQuestion + 1);
+            }
+        }
+
+        function previousQuestion() {
+            saveCurrentAnswer();
+            if (currentQuestion > 0) {
+                showQuestion(currentQuestion - 1);
+            }
+        }
+
+        function submitQuiz() {
+            saveCurrentAnswer();
+
+            // Validate all answers
+            let allAnswered = true;
+            for (let i = 0; i < questions.length; i++) {
+                if (!userAnswers[i] || userAnswers[i].low === null || userAnswers[i].high === null) {
+                    allAnswered = false;
+                    break;
+                }
+            }
+
+            if (!allAnswered) {
+                alert('Please answer all questions before submitting!');
+                return;
+            }
+
+            // Check for valid ranges
+            for (let i = 0; i < questions.length; i++) {
+                if (userAnswers[i].low >= userAnswers[i].high) {
+                    alert(`Question ${i + 1}: Low estimate must be less than high estimate!`);
+                    return;
+                }
+            }
+
+            calculateResults();
+        }
+
+        function calculateResults() {
+            let correct = 0;
+            const reviewHTML = [];
+
+            questions.forEach((q, index) => {
+                const answer = userAnswers[index];
+                const isCorrect = q.answer >= answer.low && q.answer <= answer.high;
+                
+                if (isCorrect) {
+                    correct++;
+                }
+
+                reviewHTML.push(`
+                    <div class="answer-review ${isCorrect ? 'correct' : 'incorrect'}">
+                        <div class="answer-review-title">
+                            ${isCorrect ? '✓' : '✗'} Question ${index + 1}: ${q.question}
+                        </div>
+                        <div class="answer-review-details">
+                            Your range: ${answer.low} - ${answer.high} ${q.unit}<br>
+                            Correct answer: ${q.answer} ${q.unit}
+                        </div>
+                    </div>
+                `);
+            });
+
+            const percentage = (correct / questions.length) * 100;
+            let feedback = '';
+            
+            if (percentage >= 90) {
+                feedback = "Excellent! You're very well-calibrated. You understand your knowledge boundaries well.";
+            } else if (percentage >= 70) {
+                feedback = "Good job! You're fairly well-calibrated, though you could widen your ranges a bit.";
+            } else if (percentage >= 50) {
+                feedback = "You're moderately overconfident. Try to give yourself more margin for error in your estimates.";
+            } else {
+                feedback = "You're significantly overconfident! This is very common. Most people underestimate how uncertain they are. Try to make your ranges much wider to capture your true uncertainty.";
+            }
+
+            const resultsHTML = `
+                <h2>Your Results</h2>
+                <div class="score">${correct} / ${questions.length}</div>
+                <div class="results-text">
+                    <p><strong>${percentage.toFixed(0)}% of answers fell within your 90% confidence intervals.</strong></p>
+                    <p>${feedback}</p>
+                </div>
+                <div class="calibration-info">
+                    <h3>Understanding Calibration</h3>
+                    <p>If you were perfectly calibrated, you should get about 9 out of 10 questions (90%) within your ranges. Most people only get 3-5 correct because they:</p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Underestimate their uncertainty</li>
+                        <li>Are overconfident in their knowledge</li>
+                        <li>Make their ranges too narrow</li>
+                    </ul>
+                    <p style="margin-top: 10px;">The key is to think about how much you really don't know, not just what you think you know!</p>
+                </div>
+                <h3>Answer Review</h3>
+                ${reviewHTML.join('')}
+                <button class="btn-primary" onclick="location.reload()" style="margin-top: 20px;">Try Again</button>
+            `;
+
+            document.getElementById('quizContent').style.display = 'none';
+            document.getElementById('results').innerHTML = resultsHTML;
+            document.getElementById('results').classList.add('active');
+        }
+    </script>
+</body>
+</html>
