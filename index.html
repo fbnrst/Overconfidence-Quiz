@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Overconfidence Quiz</title>
+    <title>Confidence Quiz</title>
     <style>
         * {
             margin: 0;
@@ -264,16 +264,15 @@
 </head>
 <body>
     <div class="container">
-        <h1>🎯 Overconfidence Quiz</h1>
+        <h1>🎯 Confidence Quiz</h1>
 
         <div class="start-screen" id="startScreen">
             <div class="intro">
-                <h2>Welcome to the Overconfidence Quiz!</h2>
-                <p>This quiz tests how well you can estimate your own knowledge. Most people are overconfident and provide ranges that are too narrow.</p>
+                <h2>Welcome to the Confidence Quiz!</h2>
+                <p>This quiz tests how well you can estimate your own knowledge.</p>
                 <p><strong>Instructions:</strong></p>
                 <p>For each question, provide a <strong>90% confidence interval</strong>. This means you should give a LOW and HIGH estimate where you believe there's a 90% chance the correct answer falls within that range.</p>
-                <p>If you're well-calibrated, about 9 out of 10 answers should fall within your ranges. Most people only get 3-5 correct!</p>
-                <p><strong>All measurements use the metric system.</strong></p>
+                <p>If you're well-calibrated, about 9 out of 10 answers should fall within your ranges.</p>
             </div>
             <button class="btn-primary" onclick="startQuiz()">Start Quiz</button>
         </div>
@@ -333,9 +332,9 @@
                 unit: "meters"
             },
             {
-                question: "What is the speed of light in vacuum (in meters per second)?",
-                answer: 299792458,
-                unit: "m/s"
+                question: "What is the speed of light in vacuum (in kilometers per second)?",
+                answer: 299792,
+                unit: "km/s"
             },
             {
                 question: "What is the average depth of the Pacific Ocean (in meters)?",
